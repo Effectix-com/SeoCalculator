@@ -65,7 +65,7 @@
         },  
         filters: {
           currency: function(value: number) {
-            if (!value) return '0 CZK';
+            if (!value || !Number.isFinite(value)) return '0 CZK';
 
             return value.toFixed(2) + " CZK"
           }
