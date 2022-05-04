@@ -13,15 +13,25 @@
         </div>
         <div class="flex items-center justify-between gap-2 mt-8">
           <span class="pr-8 text-xl">Konverzní poměr</span>
-          <input type="number" class="w-32 h-12 rounded-md text-black text-center" v-model="conversionRate" />
+          <div class="w-32 flex items-center">
+            <input type="number" class="w-full h-12 rounded-l-md text-black text-center" v-model="conversionRate" />
+            <span class="bg-white text-black p-3 rounded-r-md">%</span>
+          </div>
+          
         </div>
         <div class="flex items-center justify-between gap-2 mt-8">
           <span class="pr-8 text-xl">Hodnota konverze</span>
-          <input type="number" class="w-32 h-12 rounded-md text-black text-center" v-model="conversionValue" />
+          <div class="w-32 flex items-center">
+            <input type="number" class="w-full h-12 rounded-l-md text-black text-center" v-model="conversionValue" />
+            <span class="bg-white text-black p-3 rounded-r-md">CZK</span>
+          </div>          
         </div>
         <div class="flex items-center justify-between gap-2 mt-8 mb-4">
           <span class="pr-8 text-xl">Cena SEO za 1 měsíc</span>
-          <input type="number" class="w-32 h-12 rounded-md text-black text-center" v-model="monthlySeoPrice" />
+           <div class="w-32 flex items-center">
+            <input type="number" class="w-full h-12 rounded-l-md text-black text-center" v-model="monthlySeoPrice" />
+            <span class="bg-white text-black p-3 rounded-r-md">CZK</span>
+          </div>            
         </div>        
       </div>
     </div>
@@ -33,7 +43,7 @@
       </div>
       <div class="flex items-center justify-between gap-2 mt-8 mb-4">
         <span class="pr-8 text-xl">Návratnost investice</span>
-        <input class="w-32 h-12 rounded-md text-black text-center" :value="returnOnInvestment | currency" />
+        <input class="w-32 h-12 rounded-md text-black text-center" :value="returnOnInvestment | percentage" />
       </div>
     </div>    
   </div>
@@ -43,7 +53,7 @@
 <script lang="ts">
     import Vue from 'vue'
 
-    const CTR = [28.5, 15,7, 11, 8, 7.2, 5.1, 4, 3.2, 2.8, 2.5];
+    const CTR = [28.5, 15.7, 11, 8, 7.2, 5.1, 4, 3.2, 2.8, 2.5];
     
     export default Vue.extend({
         data() {
@@ -56,7 +66,7 @@
             }
         },
         computed: {
-            expectedReturn(): number {               
+            expectedReturn(): number {                 
                 return (this.kwMonthlySearchValue / 100 * CTR[this.targetPosition - 1]) / this.conversionRate * this.conversionValue;
             },
             returnOnInvestment(): number { 
@@ -68,6 +78,11 @@
             if (!value || !Number.isFinite(value)) return '0 CZK';
 
             return value.toFixed(2) + " CZK"
+          },
+          percentage: function(value: number) {
+            if (!value || !Number.isFinite(value)) return '0 %';
+
+            return value.toFixed(2) + " %"
           }
         },
         methods: {
