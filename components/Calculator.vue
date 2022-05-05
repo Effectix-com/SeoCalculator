@@ -4,55 +4,35 @@
       <h2 class="text-5xl mt-4 mb-4 text-center">
         Kalkulačka výnosů a návratnosti SEO
       </h2>
-      <div class="flex flex-col w-4/5 md:w-2/5 p-2">
+      <div class="flex flex-col md:w-2/5 p-2">
         <div class="flex items-center justify-between gap-2 mt-8">
           <span class="pr-8 text-xl">Hledanost klíčového slova za 1 měsíc</span>
-          <input
-            type="number"
-            class="w-32 h-12 rounded-md text-black text-left pl-8"
-            v-model="kwMonthlySearchValue"
-          />
+          <input type="number" class="w-48 h-12 rounded-md text-black text-left pl-8" v-model="kwMonthlySearchValue" />
         </div>
         <div class="flex items-center justify-between gap-2 mt-8">
           <span class="pr-8 text-xl">Pozice, na kterou cílíme (1.-10.)</span>
-          <input
-            type="number"
-            class="w-32 h-12 rounded-md text-black text-left pl-8"
-            v-on:change="checkTargetPosition"
-            v-model="targetPosition"
-          />
+          <input type="number" class="w-48 h-12 rounded-md text-black text-left pl-8" v-on:change="checkTargetPosition"
+            v-model="targetPosition" />
         </div>
         <div class="flex items-center justify-between gap-2 mt-8">
           <span class="pr-8 text-xl">Konverzní poměr</span>
-          <div class="w-32 flex items-center">
-            <input
-              type="number"
-              class="w-full h-12 rounded-l-md text-black text-left pl-8"
-              v-model="conversionRate"
-            />
-            <span class="bg-white text-black p-3 rounded-r-md">%</span>
+          <div class="flex items-center">
+            <input type="number" class="w-32 h-12 rounded-l-md text-black text-left pl-8" v-model="conversionRate" />
+            <span class="bg-white text-black p-3 rounded-r-md w-16">%</span>
           </div>
         </div>
         <div class="flex items-center justify-between gap-2 mt-8">
           <span class="pr-8 text-xl">Hodnota konverze</span>
-          <div class="w-32 flex items-center">
-            <input
-              type="number"
-              class="w-full h-12 rounded-l-md text-black text-left pl-8"
-              v-model="conversionValue"
-            />
-            <span class="bg-white text-black p-3 rounded-r-md">CZK</span>
+          <div class="flex items-center">
+            <input type="number" class="w-32 h-12 rounded-l-md text-black text-left pl-8" v-model="conversionValue" />
+            <span class="bg-white text-black p-3 rounded-r-md w-16">CZK</span>
           </div>
         </div>
         <div class="flex items-center justify-between gap-2 mt-8 mb-4">
           <span class="pr-8 text-xl">Cena SEO za 1 měsíc</span>
-          <div class="w-32 flex items-center">
-            <input
-              type="number"
-              class="w-full h-12 rounded-l-md text-black text-left pl-8"
-              v-model="monthlySeoPrice"
-            />
-            <span class="bg-white text-black p-3 rounded-r-md">CZK</span>
+          <div class="flex items-center">
+            <input type="number" class="w-32 h-12 rounded-l-md text-black text-left pl-8" v-model="monthlySeoPrice" />
+            <span class="bg-white text-black p-3 rounded-r-md w-16">CZK</span>
           </div>
         </div>
       </div>
@@ -61,24 +41,26 @@
       <div class="flex flex-col w-4/5 md:w-2/5 p-2">
         <div class="flex items-center justify-between gap-2 mt-4">
           <span class="pr-8 text-xl">Očekávaný výnos</span>
-          <div class="w-32 flex items-center">
-            <input
-              type="number"
-              class="w-full h-12 rounded-l-md text-black text-left pl-8"
-              :value="expectedReturn | currency"
-            />
-            <span class="bg-white text-black p-3 rounded-r-md">CZK</span>
+          <div class="flex items-center">
+            <input type="number" class="w-32 h-12 rounded-l-md text-black text-left pl-8"
+              :value="expectedReturn | finite" />
+            <span class="bg-white text-black p-3 rounded-r-md w-16">CZK</span>
           </div>
         </div>
         <div class="flex items-center justify-between gap-2 mt-8 mb-4">
           <span class="pr-8 text-xl">Návratnost investice</span>
-          <div class="w-32 flex items-center">
-            <input
-              type="number"
-              class="w-full h-12 rounded-l-md text-black text-left pl-8"
-              :value="returnOnInvestment | percentage"
-            />
-            <span class="bg-white text-black p-3 rounded-r-md">%</span>
+          <div class="flex items-center">
+            <input type="number" class="w-32 h-12 rounded-l-md text-black text-left pl-8"
+              :value="returnOnInvestment | finite" />
+            <span class="bg-white text-black p-3 rounded-r-md w-16">%</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between gap-2 mt-4">
+          <span class="pr-8 text-xl">Návratnost investice na 1 investovanou korunu</span>
+          <div class="flex items-center">
+            <input type="number" class="w-32 h-12 rounded-l-md text-black text-left pl-8"
+              :value="returnOnInvestmentCrownInvested | finite" />
+            <span class="bg-white text-black p-3 rounded-r-md w-16">CZK</span>
           </div>
         </div>
       </div>
@@ -103,29 +85,27 @@ export default Vue.extend({
   },
   computed: {
     expectedReturn(): number {
-      return (
+      return Math.ceil(
         (((this.kwMonthlySearchValue / 100) * CTR[this.targetPosition - 1]) /
           this.conversionRate) *
         this.conversionValue
       );
     },
     returnOnInvestment(): number {
-      return (
+      return Math.ceil(
         ((this.expectedReturn - this.monthlySeoPrice) / this.monthlySeoPrice) *
         100
       );
     },
+    returnOnInvestmentCrownInvested(): number {
+      return Math.ceil(this.returnOnInvestment / 100);
+    },
   },
   filters: {
-    currency: function (value: number) {
-      if (!value || !Number.isFinite(value)) return "0";
+    finite: function (value: number) {
+      if (!value || !Number.isFinite(value)) return 0;
 
-      return value.toFixed(2);
-    },
-    percentage: function (value: number) {
-      if (!value || !Number.isFinite(value)) return "0";
-
-      return value.toFixed(2);
+      return value;
     },
   },
   methods: {
@@ -134,8 +114,8 @@ export default Vue.extend({
         this.targetPosition > 10
           ? 1
           : this.targetPosition < 1
-          ? 10
-          : this.targetPosition;
+            ? 10
+            : this.targetPosition;
     },
   },
 });
