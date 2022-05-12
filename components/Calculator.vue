@@ -98,7 +98,7 @@ export default Vue.extend({
       );
     },
     returnOnInvestmentCrownInvested(): number {
-      return Math.ceil(this.returnOnInvestment / 100);
+      return this.returnOnInvestment / 100;
     },
   },
   filters: {
