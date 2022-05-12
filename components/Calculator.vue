@@ -86,7 +86,7 @@ export default Vue.extend({
   computed: {
     expectedReturn(): number {
       return Math.ceil(
-        (((this.kwMonthlySearchValue / 100) * CTR[this.targetPosition - 1]) /
+        (Math.ceil((this.kwMonthlySearchValue / 100) * CTR[this.targetPosition - 1]) /
           this.conversionRate) *
         this.conversionValue
       );
