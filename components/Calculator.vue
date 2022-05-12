@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="flex items-center justify-between gap-2 mt-8 mb-4">
-          <span class="pr-8 text-xl">Cena SEO za 1 měsíc</span>
+          <span class="pr-8 text-xl">Investice do SEO za 1 měsíc</span>
           <div class="flex items-center">
             <input type="number" class="w-32 h-12 rounded-l-md text-black text-left pl-8" v-model="monthlySeoPrice" />
             <span class="bg-white text-black p-3 rounded-r-md w-16">CZK</span>
